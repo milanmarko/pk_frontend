@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Payment Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-1: #f6efe6;
+        --bg-2: #ffd99f;
+        --card: rgba(255, 255, 255, 0.9);
+        --text: #1f1b17;
+        --muted: #6f6256;
+        --primary: #0b6b6f;
+        --primary-strong: #084f52;
+        --danger: #b4292e;
+        --success: #146d39;
+        --ring: rgba(11, 107, 111, 0.2);
+        --border: rgba(27, 20, 13, 0.12);
+        --shadow: 0 20px 45px rgba(32, 23, 13, 0.16);
+        --radius-xl: 20px;
+        --radius-lg: 14px;
+        --radius-sm: 10px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(
+            circle at 85% 12%,
+            rgba(11, 107, 111, 0.22),
+            transparent 38%
+          ),
+          radial-gradient(
+            circle at 12% 82%,
+            rgba(180, 41, 46, 0.15),
+            transparent 34%
+          ),
+          linear-gradient(135deg, var(--bg-1), var(--bg-2));
+        display: grid;
+        place-items: center;
+        padding: 28px;
+      }
+
+      .payment-shell {
+        width: min(720px, 100%);
+        background: var(--card);
+        backdrop-filter: blur(8px);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        animation: rise 560ms ease;
+      }
+
+      .payment-head {
+        padding: 26px 28px 12px;
+        background: linear-gradient(
+          120deg,
+          rgba(11, 107, 111, 0.08),
+          rgba(255, 217, 159, 0.45)
+        );
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2rem);
+        letter-spacing: 0.02em;
+      }
+
+      .subtitle {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 0.97rem;
+      }
+
+      form {
+        padding: 20px 28px 28px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+
+      .field {
+        grid-column: span 12;
+        display: grid;
+        gap: 6px;
+      }
+
+      .field.half {
+        grid-column: span 6;
+      }
+
+      .field.third {
+        grid-column: span 4;
+      }
+
+      label {
+        font-size: 0.87rem;
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 11px 12px;
+        font: inherit;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.84);
+        transition:
+          border-color 120ms ease,
+          box-shadow 120ms ease;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--ring);
+      }
+
+      .hint {
+        margin-top: -6px;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-end;
+        padding-top: 4px;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 999px;
+        background: var(--primary);
+        color: #fff;
+        padding: 12px 20px;
+        font: inherit;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        transition:
+          transform 120ms ease,
+          background 120ms ease;
+      }
+
+      .btn:hover {
+        background: var(--primary-strong);
+        transform: translateY(-1px);
+      }
+
+      .btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .status {
+        min-height: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .status.error {
+        color: var(--danger);
+      }
+
+      .status.success {
+        color: var(--success);
+      }
+
+      .shake {
+        animation: shake 320ms ease;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.985);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes shake {
+        20% {
+          transform: translateX(-6px);
+        }
+        40% {
+          transform: translateX(6px);
+        }
+        60% {
+          transform: translateX(-4px);
+        }
+        80% {
+          transform: translateX(4px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      @media (max-width: 680px) {
+        body {
+          padding: 16px;
+        }
+
+        .payment-head,
+        form {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+
+        .field.half,
+        .field.third {
+          grid-column: span 12;
+        }
+
+        .actions {
+          justify-content: stretch;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="payment-shell" aria-label="Credit card payment form">
+      <header class="payment-head">
+        <h1>Menő pamkutya név generátor</h1>
+        <p class="subtitle">
+          Neked mi lenne a menő pamkutya neved? Add meg a kártyaadataid, és
+          megtudod!
+        </p>
+      </header>
+
+      <form id="paymentForm">
+        <div class="grid">
+          <div class="field half">
+            <label for="cardHolderName">Kártyatulajdonos neve</label>
+            <input
+              id="cardHolderName"
+              name="cardHolderName"
+              autocomplete="cc-name"
+              placeholder="Jane Doe"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="cardNumber">Kártyaszám</label>
+            <input
+              id="cardNumber"
+              name="cardNumber"
+              autocomplete="cc-number"
+              inputmode="numeric"
+              maxlength="23"
+              placeholder="4242 4242 4242 4242"
+              required
+            />
+          </div>
+
+          <div class="field third">
+            <label for="cardExpiryDate">Lejárat dátuma</label>
+            <input
+              type="text"
+              id="cardExpiryDate"
+              name="cardExpiryDate"
+              required
+              placeholder="YY/MM"
+            />
+          </div>
+
+          <div class="field third">
+            <label for="cvc">CVV</label>
+            <input
+              id="cvc"
+              name="cvc"
+              autocomplete="cc-csc"
+              inputmode="numeric"
+              maxlength="4"
+              placeholder="123"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="submitBtn" class="btn">
+            Tudd meg a menő pamkutya neved!
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <script>
+      const submitBtn = document.getElementById("submitBtn");
+      const cardHolderNameInput = document.getElementById("cardHolderName");
+      const cardNumberInput = document.getElementById("cardNumber");
+      const cardExpiryDateInput = document.getElementById("cardExpiryDate");
+      const cvcInput = document.getElementById("cvc");
+      submitBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+
+        try {
+          const response = await fetch(
+            "pamkutya-backend.jcloud.jedlik.cloud/generateName",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                cardHolderName: cardHolderNameInput.value,
+                cardNumber: cardNumberInput.value,
+                cardExpiryDate: cardExpiryDateInput.value,
+                cvc: cvcInput.value,
+              }),
+            },
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert(`A menő pamkutya neved: ${data.name}`);
+          } else {
+            alert(`Hiba: ${data.error}`);
+          }
+        } catch (error) {
+          alert("Hiba történt a menő pamkutya neved generálása során.");
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
